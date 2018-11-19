@@ -1,49 +1,48 @@
 const Axios = require('axios');
-const crypto = require('crypto');
-const jimp = require('jimp');
 
 const { apiRoutes } = require('../../config')
 const { encrypt, decrypt  } = require('../../ultils/crypto')
+const { createResizeImageBase64, createBlackImageBase64 } = require('../../ultils/images')
 
 const _getRandomNumber = () => {
-    return Math.floor(Math.random() * 803) + 1 ;
-}
-
-const _createImageBase64 = async (url) => {
-    const image = await jimp.read(url);
-    await image.color([{ apply: 'darken', params: [100] }]).resize(220, jimp.AUTO)
-    const convert64 = image.getBase64Async(jimp.AUTO)
-
-    return convert64;
+    return Math.floor(Math.random() * 949) + 1;
 }
 
 const _responseFormat = async (data) => {
     return [{
         name: data.name,
         encryptName: encrypt(data.name),
-        pokemonImage: await _createImageBase64(`${apiRoutes.sprites}/${data.id}.png`),
+        pokemonImage: await createBlackImageBase64(`${apiRoutes.sprites}/${data.id}.png`),
     }]
 }
-const checkPokemon = (context) => {
+
+const _responseFormatCorrect = async (data) => {
+    return [{
+        name: data.name,
+        pokemonImage: await createResizeImageBase64(`${apiRoutes.sprites}/${data.id}.png`)
+    }]
+}
+const checkPokemon = async (context) => {
     const data = context.request.body;
-    console.log(encrypt(data.name));
-    console.log(decrypt(data.encryptName));
     if(data.name === decrypt(data.encryptName)) {
-        return context.ok({success: true})
+        let response = await pokemons(data.name)
+        return context.ok(await _responseFormatCorrect(response))
     }
 
-    return context.notFound();
+    return context.notFound()
 }
-
-const pokemons = 
-    Axios.get(`${apiRoutes.pokemon}/${_getRandomNumber()}`)
-        .then((response) => _responseFormat(response.data))
+const pokemons = (data) => {
+    let filter = data ? data : _getRandomNumber();
+    return Axios.get(`${apiRoutes.pokemon}/${filter}`)
+        .then((response) => response.data)
         .catch((error) => error)
-
-const getPokemonRandom = (context) =>
-        pokemons
-          .then(context.ok);        
-
+} 
+    
+const getPokemonRandom = async (context) => {
+    let response = await pokemons();
+    context.ok(await _responseFormat(response))
+}
+     
 module.exports = {
     getPokemon: getPokemonRandom,
     checkPokemon
