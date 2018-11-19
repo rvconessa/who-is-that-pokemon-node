@@ -22,6 +22,7 @@ const _responseFormatCorrect = async (data) => {
         pokemonImage: await createResizeImageBase64(`${apiRoutes.sprites}/${data.id}.png`)
     }]
 }
+
 const checkPokemon = async (context) => {
     const data = context.request.body;
     if(data.name === decrypt(data.encryptName)) {
@@ -31,6 +32,7 @@ const checkPokemon = async (context) => {
 
     return context.notFound()
 }
+
 const pokemons = (data) => {
     let filter = data ? data : _getRandomNumber();
     return Axios.get(`${apiRoutes.pokemon}/${filter}`)
