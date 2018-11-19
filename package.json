@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "test": "NODE_ENV=development jest  --detectOpenHandles --forceExit"
   },
   "keywords": [],
   "author": "",
@@ -21,5 +22,9 @@
     "koa-simple-healthcheck": "0.0.1",
     "load-route-files": "^1.0.6",
     "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0",
+    "supertest": "^3.3.0"
   }
 }
