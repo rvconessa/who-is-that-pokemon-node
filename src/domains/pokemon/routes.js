@@ -6,17 +6,13 @@ router.name = 'Pokemons';
 router.prefix('/pokemon');
 
 router.get('/', {
-    description: 'Sorteia um Pokemon',
+    description: 'Random Pokemon',
     tags: ['api'],
-    handler: async (ctx) => {
-        const pokemon = await Handlers.getPokemon;
-        ctx.status = 200;
-        ctx.body = {pokemon};
-    }
+    handler: Handlers.getPokemon
 });
 
 router.post('/', {
-    description: 'Checa um Pokemon',
+    description: 'Check Pokemon',
     handler: Handlers.checkPokemon
 });
 

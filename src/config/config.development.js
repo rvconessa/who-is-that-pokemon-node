@@ -7,7 +7,8 @@ module.exports = {
       sprites: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon',
     },
     encryptionConfig: {
-        algorithm: 'aes-256-ctr',
-        hash: 'renan-pokemon-teste'
+        algorithm: "aes-256-cbc",
+        hash: "renan-pokemon-api-teste",
+        iv_length: 16
     }
   }
