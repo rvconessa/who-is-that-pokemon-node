@@ -1,5 +1,4 @@
 const api = require('./api');
+const { api: apiConfig } = require('./config');
 
-const port = 3000;
-
-api({ port });
+api(apiConfig);
